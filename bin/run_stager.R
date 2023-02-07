@@ -27,8 +27,6 @@ analysis_type <- args[2]
 # Please see following for details:
 # https://f1000research.com/articles/7-952
 
-strp <- function(x) substr(x,1,15)
-
 if (analysis_type == "dexseq"){
 
     dxr <- read.table(results, sep="\t", header = TRUE)
@@ -40,13 +38,11 @@ if (analysis_type == "dexseq"){
     qval <- readRDS(qval)
 
     pConfirmation <- matrix(dxr$pvalue,ncol=1)
-    dimnames(pConfirmation) <- list(strp(dxr$featureID),"transcript")
+    dimnames(pConfirmation) <- list(dxr$featureID,"transcript")
 
     pScreen <- qval
-    names(pScreen) <- strp(names(pScreen))
 
     tx2gene <- as.data.frame(dxr[,c("featureID", "groupID")])
-    for (i in 1:2) tx2gene[,i] <- strp(tx2gene[,i])
 
     res_pval <- as.data.frame(dxr[,1:7])
 
@@ -61,13 +57,12 @@ if (analysis_type == "dexseq"){
     res.txp <- readRDS(res.txp)
 
     pConfirmation <- matrix(res.txp$pvalue, ncol=1)
-    rownames(pConfirmation) <- strp(res.txp$feature_id)
+    rownames(pConfirmation) <- res.txp$feature_id
 
     pScreen <- res$pvalue
-    names(pScreen) <- strp(res$gene_id)
+    names(pScreen) <- res$gene_id
 
     tx2gene <- res.txp[,c("feature_id", "gene_id")]
-    for (i in 1:2) tx2gene[,i] <- strp(tx2gene[,i])
 
     res_pval <- as.data.frame(res[,1:6])
 }
